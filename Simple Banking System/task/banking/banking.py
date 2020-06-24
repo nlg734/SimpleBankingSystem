@@ -5,10 +5,28 @@ import random
 accounts = dict()
 
 
+def get_checksum(num):
+    numbers = list(map(int, num))
+    for x in range(0,len(numbers),2):
+        numbers[x] *= 2
+    total = 0
+    for i in range(len(numbers)):
+        if numbers[i] > 9:
+            total += numbers[i] - 9
+        else:
+            total += numbers[i]
+    return str(10 - (total % 10))
+
+
 def generate_number():
     while True:
         num = random.randint(0, 1000000000)
-        acc = "400000" + str(num).zfill(9) + "7"
+        acc = "400000" + str(num).zfill(9)
+        checksum = get_checksum(acc)
+        if checksum == "10":
+            acc = acc + "0"
+        else:
+            acc = acc + checksum
         if len(accounts) == 0:
             return acc
         if acc not in accounts.keys():
